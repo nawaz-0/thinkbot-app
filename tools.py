@@ -1,13 +1,14 @@
 import os
 import requests
 from dotenv import load_dotenv
-from openai import OpenAI
+import google.generativeai as genai
 
-# Load environment variables from .env (for local testing)
+# Load environment variables from .env
 load_dotenv()
 
-# Get OpenAI API key from environment variable
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+# Configure Gemini API
+genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+model = genai.GenerativeModel("gemini-pro")
 
 # Web Search Function
 def web_search(query):
@@ -18,22 +19,14 @@ def web_search(query):
     response = requests.get(url, headers=headers)
     return response.text
 
-# Summarize the fetched web content
+# Summarize the fetched web content using Gemini
 def summarize_text(text):
     prompt = f"Summarize this content in simple terms:\n{text}"
-    response = client.chat.completions.create(
-        model="gpt-3.5-turbo", 
-        messages=[{"role": "user", "content": prompt}],
-        max_tokens=300
-    )
-    return response.choices[0].message.content.strip()
+    response = model.generate_content(prompt)
+    return response.text.strip()
 
-# Generate the final blog or content
+# Generate the final blog or content using Gemini
 def generate_content(summary):
     prompt = f"Write a blog article based on this summary:\n{summary}"
-    response = client.chat.completions.create(
-        model="gpt-3.5-turbo", 
-        messages=[{"role": "user", "content": prompt}],
-        max_tokens=500
-    )
-    return response.choices[0].message.content.strip()
+    response = model.generate_content(prompt)
+    return response.text.strip()
