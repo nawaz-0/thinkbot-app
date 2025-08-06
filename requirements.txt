@@ -382,5 +382,5 @@ zstandard @ file:///C:/b/abs_31t8xmrv_h/croot/zstandard_1731356578015/work
 streamlit
 openai
 python-dotenv
-beautifulsoup4
 requests
+beautifulsoup4
