@@ -1,6 +1,9 @@
 from dotenv import load_dotenv
 import os
 import openai
+import requests
+from bs4 import BeautifulSoup  # ✅ Import BeautifulSoup
+
 load_dotenv()
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
@@ -16,7 +19,7 @@ def web_search(query):
 def summarize_text(text):
     prompt = f"Summarize this text for a blog:\n\n{text}"
     response = openai.ChatCompletion.create(
-        model="gpt-4",
+        model="gpt-3.5-turbo",  # 🔁 Use gpt-3.5 unless you're sure gpt-4 is enabled
         messages=[{"role": "user", "content": prompt}],
         max_tokens=300
     )
@@ -25,7 +28,7 @@ def summarize_text(text):
 def generate_content(topic):
     prompt = f"Write a 300-word engaging blog on the topic:\n'{topic}'\n\nMake it suitable for social media or personal website."
     response = openai.ChatCompletion.create(
-        model="gpt-4",
+        model="gpt-3.5-turbo",  # 🔁 Same here
         messages=[{"role": "user", "content": prompt}],
         max_tokens=500
     )
