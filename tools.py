@@ -1,35 +1,31 @@
 from dotenv import load_dotenv
 import os
-import openai
+from openai import OpenAI
 import requests
-from bs4 import BeautifulSoup  # ✅ Import BeautifulSoup
 
 load_dotenv()
-openai.api_key = os.getenv("OPENAI_API_KEY")
+
+# Initialize the OpenAI client
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 def web_search(query):
-    url = f"https://www.google.com/search?q={query}"
-    headers = {"User-Agent": "Mozilla/5.0"}
-    response = requests.get(url, headers=headers)
-    soup = BeautifulSoup(response.text, "html.parser")
-    results = soup.find_all("div", class_="BNeawe s3v9rd AP7Wnd")
-    texts = [r.get_text() for r in results[:5]]
-    return "\n".join(texts)
+    # Simple dummy web search logic (replace with real search API later)
+    return f"Search results for: {query}\n1. Article about {query}\n2. Blog about {query}\n3. News on {query}"
 
 def summarize_text(text):
     prompt = f"Summarize this text for a blog:\n\n{text}"
-    response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",  # 🔁 Use gpt-3.5 unless you're sure gpt-4 is enabled
+    response = client.chat.completions.create(
+        model="gpt-3.5-turbo",
         messages=[{"role": "user", "content": prompt}],
         max_tokens=300
     )
-    return response['choices'][0]['message']['content']
+    return response.choices[0].message.content
 
 def generate_content(topic):
-    prompt = f"Write a 300-word engaging blog on the topic:\n'{topic}'\n\nMake it suitable for social media or personal website."
-    response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",  # 🔁 Same here
+    prompt = f"Write a 300-word engaging blog on the topic:\n'{topic}'\n\nMake it suitable for social media or a personal website."
+    response = client.chat.completions.create(
+        model="gpt-3.5-turbo",
         messages=[{"role": "user", "content": prompt}],
         max_tokens=500
     )
-    return response['choices'][0]['message']['content']
+    return response.choices[0].message.content
