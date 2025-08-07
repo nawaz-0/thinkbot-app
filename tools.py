@@ -1,38 +1,31 @@
 from dotenv import load_dotenv
-from bs4 import BeautifulSoup
 import os
 import requests
+from bs4 import BeautifulSoup
 import google.generativeai as genai
 
-# Load environment variables
+# Load .env and configure Gemini
 load_dotenv()
-api_key = os.getenv("GEMINI_API_KEY")
+genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 
-# Configure Gemini API
-genai.configure(api_key=api_key)
+# Load the correct model
+model = genai.GenerativeModel("models/gemini-2.5-flash-live-preview")  # ✅ Supported for generate_content
 
-# Web Search Function
 def web_search(query):
     headers = {"User-Agent": "Mozilla/5.0"}
     url = f"https://www.google.com/search?q={query}"
     response = requests.get(url, headers=headers)
     soup = BeautifulSoup(response.text, 'html.parser')
-    return soup.get_text()[:3000]  # Optional: limit to 3000 characters
+    return soup.get_text()[:3000]
 
-# Summarize the fetched web content using Gemini
 def summarize_text(text):
     if len(text) > 5000:
         text = text[:5000]
     prompt = f"Summarize this content in simple terms:\n{text}"
-    model = genai.GenerativeModel("models/gemini-2.5-flash-live-preview")  # ✅ UPDATED MODEL NAME
-    chat = model.start_chat()
-    response = chat.send_message(prompt)
+    response = model.generate_content(prompt)  # ✅ Use generate_content directly
     return response.text.strip()
 
-# Generate the final blog or content using Gemini
 def generate_content(summary):
     prompt = f"Write a blog article based on this summary:\n{summary}"
-    model = genai.GenerativeModel("models/gemini-2.5-flash-live-preview")  # ✅ UPDATED MODEL NAME
-    chat = model.start_chat()
-    response = chat.send_message(prompt)
+    response = model.generate_content(prompt)  # ✅ Use generate_content directly
     return response.text.strip()
