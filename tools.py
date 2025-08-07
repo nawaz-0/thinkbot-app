@@ -14,8 +14,8 @@ if not api_key:
 # Configure Gemini with the API key
 genai.configure(api_key=api_key)
 
-# Set the correct model (adjust if necessary based on available list)
-model = genai.GenerativeModel= ("models/gemini-2.5-flash")
+# Define the model name (update if needed)
+MODEL_NAME = "models/gemini-2.5-flash"
 
 # Web Search Function
 def web_search(query):
@@ -28,12 +28,23 @@ def web_search(query):
 def summarize_text(text):
     if len(text) > 5000:
         text = text[:5000]
+
     prompt = f"Summarize this content in simple terms:\n{text}"
-    response = model.generate_content(prompt)
+
+    # Correct usage: call generate_content through genai client
+    response = genai.models.generate_content(
+        model=MODEL_NAME,
+        contents=prompt
+    )
     return response.text.strip()
 
 # Generate the final blog or content using Gemini
 def generate_content(summary):
     prompt = f"Write a blog article based on this summary:\n{summary}"
-    response = model.generate_content(prompt)
+
+    response = genai.models.generate_content(
+        model=MODEL_NAME,
+        contents=prompt
+    )
     return response.text.strip()
+
