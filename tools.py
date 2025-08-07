@@ -9,7 +9,7 @@ load_dotenv()
 api_key = os.getenv("GEMINI_API_KEY")
 
 # Configure Gemini API
-genai.configure(api_key="api_key")
+genai.configure(api_key=api_key)
 """models = genai.list_models()
 for model in models:
     print("Model name:", model.name)
