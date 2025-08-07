@@ -10,11 +10,11 @@ api_key = os.getenv("GEMINI_API_KEY")
 
 # Configure Gemini API
 genai.configure(api_key="api_key")
-models = genai.list_models()
+"""models = genai.list_models()
 for model in models:
     print("Model name:", model.name)
     print("Supported generation methods:", model.supported_generation_methods)
-    print("-" * 40)
+    print("-" * 40)"""
 # Web Search Function
 def web_search(query):
     headers = {"User-Agent": "Mozilla/5.0"}
