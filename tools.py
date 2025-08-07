@@ -9,8 +9,12 @@ load_dotenv()
 api_key = os.getenv("GEMINI_API_KEY")
 
 # Configure Gemini API
-genai.configure(api_key=api_key)
-
+genai.configure(api_key="api_key")
+models = genai.list_models()
+for model in models:
+    print("Model name:", model.name)
+    print("Supported generation methods:", model.supported_generation_methods)
+    print("-" * 40)
 # Web Search Function
 def web_search(query):
     headers = {"User-Agent": "Mozilla/5.0"}
@@ -24,7 +28,7 @@ def summarize_text(text):
     if len(text) > 5000:
     text = text[:5000]
     prompt = f"Summarize this content in simple terms:\n{text}"
-    model = genai.GenerativeModel("models/gemini-2.0-pro")  # ✅ CORRECTED
+    model = genai.GenerativeModel("models/gemini-2.0-pro") # ✅ CORRECTED
     chat = model.start_chat()
     response = chat.send_message(prompt)
     return response.text.strip()
