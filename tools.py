@@ -1,14 +1,15 @@
+from dotenv import load_dotenv
 import os
 import requests
-from dotenv import load_dotenv
 import google.generativeai as genai
 
-# Load environment variables from .env
+# Load environment variables
 load_dotenv()
+api_key = os.getenv("GEMINI_API_KEY")
 
 # Configure Gemini API
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
-model = "models/gemini-2.0-pro"
+genai.configure(api_key=api_key)
+
 # Web Search Function
 def web_search(query):
     headers = {"User-Agent": "Mozilla/5.0"}
@@ -19,6 +20,7 @@ def web_search(query):
 # Summarize the fetched web content using Gemini
 def summarize_text(text):
     prompt = f"Summarize this content in simple terms:\n{text}"
+    model = genai.GenerativeModel("models/gemini-2.0-pro")  # ✅ CORRECTED
     chat = model.start_chat()
     response = chat.send_message(prompt)
     return response.text.strip()
@@ -26,6 +28,7 @@ def summarize_text(text):
 # Generate the final blog or content using Gemini
 def generate_content(summary):
     prompt = f"Write a blog article based on this summary:\n{summary}"
+    model = genai.GenerativeModel("models/gemini-2.0-pro")  # ✅ CORRECTED
     chat = model.start_chat()
     response = chat.send_message(prompt)
     return response.text.strip()
