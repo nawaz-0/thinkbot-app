@@ -15,7 +15,7 @@ if not api_key:
 genai.configure(api_key=api_key)
 
 # Set the correct model (adjust if necessary based on available list)
-model = genai.GenerativeModel= ("models/gemini-2.5-pro")
+model = genai.GenerativeModel= ("models/gemini-2.5-flash")
 
 # Web Search Function
 def web_search(query):
