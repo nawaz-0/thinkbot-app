@@ -26,7 +26,7 @@ def web_search(query):
 # Summarize the fetched web content using Gemini
 def summarize_text(text):
     if len(text) > 5000:
-    text = text[:5000]
+     text = text[:5000]
     prompt = f"Summarize this content in simple terms:\n{text}"
     model = genai.GenerativeModel("models/gemini-2.0-pro") # ✅ CORRECTED
     chat = model.start_chat()
