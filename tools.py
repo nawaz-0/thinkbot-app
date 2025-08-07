@@ -8,8 +8,7 @@ load_dotenv()
 
 # Configure Gemini API
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
-model = genai.GenerativeModel("models/gemini-2.0-flash-live-001")
-
+model = "models/gemini-2.0-pro"
 # Web Search Function
 def web_search(query):
     headers = {"User-Agent": "Mozilla/5.0"}
