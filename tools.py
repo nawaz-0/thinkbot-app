@@ -1,31 +1,39 @@
 from dotenv import load_dotenv
 import os
 import requests
-from bs4 import BeautifulSoup
 import google.generativeai as genai
 
-# Load .env and configure Gemini
+# Load environment variables from .env
 load_dotenv()
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 
-# Load the correct model
-model = genai.GenerativeModel("models/gemini-pro")  # ✅ Supported for generate_content
+# Get the API key
+api_key = os.getenv("GEMINI_API_KEY")
+if not api_key:
+    raise ValueError("❌ GEMINI_API_KEY not found in environment!")
 
+# Configure Gemini with the API key
+genai.configure(api_key=api_key)
+
+# Set the correct model (adjust if necessary based on available list)
+model = genai.GenerativeModel("models/gemini-pro")
+
+# Web Search Function
 def web_search(query):
     headers = {"User-Agent": "Mozilla/5.0"}
     url = f"https://www.google.com/search?q={query}"
     response = requests.get(url, headers=headers)
-    soup = BeautifulSoup(response.text, 'html.parser')
-    return soup.get_text()[:3000]
+    return response.text
 
+# Summarize the fetched web content using Gemini
 def summarize_text(text):
     if len(text) > 5000:
         text = text[:5000]
     prompt = f"Summarize this content in simple terms:\n{text}"
-    response = model.generate_content(prompt)  # ✅ Use generate_content directly
+    response = model.generate_content(prompt)
     return response.text.strip()
 
+# Generate the final blog or content using Gemini
 def generate_content(summary):
     prompt = f"Write a blog article based on this summary:\n{summary}"
-    response = model.generate_content(prompt)  # ✅ Use generate_content directly
+    response = model.generate_content(prompt)
     return response.text.strip()
