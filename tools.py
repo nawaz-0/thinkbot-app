@@ -9,7 +9,7 @@ load_dotenv()
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 
 # Load the correct model
-model = genai.GenerativeModel("models/gemini-2.5-flash-live-preview")  # ✅ Supported for generate_content
+model = genai.GenerativeModel("models/gemini-pro")  # ✅ Supported for generate_content
 
 def web_search(query):
     headers = {"User-Agent": "Mozilla/5.0"}
